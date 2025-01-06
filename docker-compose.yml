@@ -1,21 +1,13 @@
 version: '3.9'
 services:
-  db:
-    image: mysql
+  postgres:
+    image: postgres:13
     environment:
-      MYSQL_DATABASE: data_uptaeb
-      MYSQL_USER: root_user
-      MYSQL_PASSWORD: 123123
-      MYSQL_ROOT_PASSWORD: 123123
+      POSTGRES_DB: tjmdb
+      POSTGRES_USER: jaime
+      POSTGRES_PASSWORD: 123123
     restart: always
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - ./bd.sql2.sql:/docker-entrypoint-initdb.d/bd.sql2.sql
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    ports:
-      - 8082:80
-    environment:
-      - PMA_ARBITRARY=1
+      - ./postgres_data:/var/lib/postgresql/data

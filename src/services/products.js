@@ -1,44 +1,34 @@
 const boom = require('@hapi/boom');
-const { Op } = require('sequelize');
-const  { models } = require('../../libs/sequelize')
+const  { models } = require('../libs/postgres')
 
 class Products{
-
   constructor(){}
 
   async find(query){
     const options = {
-      include: ['category'],
+      // include: ['category'],
       where: {}
     }
 
     const {
       limit,
-      offset,
-      priceMin,
-      priceMax
-    } = query
+      offset
+    } = query;
 
     if(limit && offset){
       options.limit = limit,
       options.offset = offset
     }
 
-    if(priceMin && priceMax){
-      options.where.price = {
-        [Op.gte]: priceMin,
-        [Op.lte]: priceMax
-      };
-    }
-
     const res = await models.Product.findAll(options);
     return res
   }
 
-  findOne(id){
-    const product = models.Product.findByPk(id)
+  async findOne(id){
+    const product = await models.Product.findByPk(id)
+    console.log("🚀 ~ Products ~ findOne ~ product:", product)
     if(!product){
-      throw boom.notFound('product not fount')
+      throw boom.notFound('product not found')
     }
     return product
   }
@@ -46,38 +36,27 @@ class Products{
   async create(body){
     const newProduct = await models.Product.create(body)
     return {
-      message: "Create success",
+      message: "create success",
       success: newProduct
     }
   }
 
   async update(id, body){
-
-    let index = this.products.findIndex(item => item.id === id)
-
-    if(index === -1){
-      throw boom.notFound('product not fount')
+    const product = await this.findOne(id)
+    const result = await product.update(body);
+    return {
+      message: "update success",
+      success: result
     }
-
-    const updateProduct = this.products
-
-    updateProduct[index] = {
-      ...this.products[index],
-      ...body
-    }
-
-    return 'Success Update'
   }
 
-  delete(id){
-    const index = this.products.findIndex(item => item.id === id);
-
-    if(index === -1){
-      throw boom.notFound('product not fount')
+  async delete(id){
+    const product = await this.findOne(id)
+    await product.destroy()
+    return {
+      message: "delete success",
+      success: id
     }
-
-    delete(this.products[index])
-    return 'Success Delete'
   }
 
 }
