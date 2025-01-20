@@ -11,7 +11,13 @@ const config = {
   dbPort: process.env.DB_PORT,
   AD_001: process.env.ACCESS_DOMAIN_001,
   AD_002: process.env.ACCESS_DOMAIN_002,
-  DB_URL: process.env.DATABASE_URL
+  DB_URL: process.env.DATABASE_URL,
+
+  cloudName: process.env.CLOUDINARY_NAME,
+  cloudKey: process.env.CLOUDINARY_API_KEY,
+  cloudSecret: process.env.CLOUDINARY_API_SECRET,
+
+  keyJWT: process.env.KEY_JWT,
 }
 
 module.exports = {config}

@@ -1,15 +1,18 @@
 //dependencies
+const passport = require('passport');
 const { Router } = require('express')
 //my dependencies
 const ProductService = require('../services/products')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
+const { checkApiKey } = require('../middleware/auth.handler');
 const {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require('../schema/product');
 // constants
 const router = Router()
 const services = new ProductService();
 
 router.get('/',
+  checkApiKey,
   validatorHandler(queryProductSchema,'query'),
   async(req,res,next)=>{
     try{
@@ -21,6 +24,7 @@ router.get('/',
 });
 
 router.get('/:id',
+  checkApiKey,
   validatorHandler(getProductSchema, 'params'),
   async(req,res,next)=>{
     try{
@@ -34,6 +38,7 @@ router.get('/:id',
 });
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createProductSchema, 'body'),
   async(req,res,next)=>{
     try{
@@ -48,6 +53,7 @@ router.post('/',
 });
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
   async(req, res, next)=>{
@@ -62,6 +68,7 @@ router.put('/:id',
 });
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getProductSchema, 'params'),
   async(req,res,next)=>{
     try{

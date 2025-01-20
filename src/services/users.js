@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const  { models } = require('../libs/postgres')
+const  { hashPassword } = require('../libs/encrypt')
 
 class Users{
   constructor(){}
@@ -9,9 +10,15 @@ class Users{
     return res
   }
 
+  async findByEmail(email){
+    const res = await models.User.findOne({
+      where: { email }
+    });
+    return res
+  }
+
   async findOne(id){
     const user = await models.User.findByPk(id)
-    console.log("🚀 ~ users ~ findOne ~ user:", user)
     if(!user){
       throw boom.notFound('user not found')
     }
@@ -19,6 +26,11 @@ class Users{
   }
 
   async create(body){
+    const {password} = body;
+    const hash = await hashPassword(password);
+    console.log("🚀 ~ Images ~ create ~ hash:", hash)
+    body.password = hash;
+    console.log("🚀 ~ Images ~ create ~ body:", body)
     const newUser = await models.User.create(body)
     return {
       message: "create success",

@@ -1,4 +1,5 @@
 //dependencies
+const passport = require('passport');
 const { Router } = require('express')
 //my dependencies
 const SuggestService = require('../services/suggestions')
@@ -23,6 +24,7 @@ router.get('/:idProduct',
 });
 
 router.post('/',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(createSuggestSchema, 'body'),
   async(req,res,next)=>{
     try{
@@ -36,6 +38,7 @@ router.post('/',
 });
 
 router.put('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(getSuggestSchema, 'params'),
   validatorHandler(updateSuggestSchema, 'body'),
   async(req, res, next)=>{
@@ -50,6 +53,7 @@ router.put('/:id',
 });
 
 router.delete('/:id',
+  passport.authenticate('jwt', {session: false}),
   validatorHandler(deleteSuggestSchema, 'params'),
   async(req,res,next)=>{
     try{

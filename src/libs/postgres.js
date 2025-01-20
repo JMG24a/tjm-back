@@ -11,14 +11,11 @@ const options = {
   logging: config.isProd ? false : true
 }
 
-const sequelize = new Sequelize(URI,{
-  dialect: 'postgres',
-  logging: true
-});
+const sequelize = new Sequelize(URI,options);
 
 setupModels(sequelize)
 
 //warning - this rewrite all data base
-sequelize.sync();
+// sequelize.sync();
 
 module.exports = sequelize;
