@@ -6,6 +6,8 @@ const fs = require('fs');
 const ImageService = require('../services/images.js')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
+const { checkApiRol } = require('../middleware/auth.handler');
+
 const {getImageSchema, deleteImageSchema} = require('../schema/images');
 const { cloudinary, upload } = require('../middleware/image.handle.js');
 

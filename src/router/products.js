@@ -5,6 +5,8 @@ const { Router } = require('express')
 const ProductService = require('../services/products')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
+const { checkApiRol } = require('../middleware/auth.handler');
+
 const { checkApiKey } = require('../middleware/auth.handler');
 const {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require('../schema/product');
 // constants
