@@ -28,6 +28,7 @@ router.get('/:id',
 
 router.post('/',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   upload.single('image'),
   async(req,res,next)=>{
     try {
@@ -55,6 +56,7 @@ router.post('/',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(deleteImageSchema, 'params'),
   async(req,res,next)=>{
     try{

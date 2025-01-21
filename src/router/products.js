@@ -39,11 +39,11 @@ router.get('/:id',
 
 router.post('/',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(createProductSchema, 'body'),
   async(req,res,next)=>{
     try{
       const body = req.body
-      console.log("🚀 ~ async ~ body:", body)
       const product = await services.create(body);
       res.json(product)
     }
@@ -54,6 +54,7 @@ router.post('/',
 
 router.put('/:id',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
   async(req, res, next)=>{
@@ -69,6 +70,7 @@ router.put('/:id',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(getProductSchema, 'params'),
   async(req,res,next)=>{
     try{

@@ -9,4 +9,17 @@ function checkApiKey(req, res, next){
   }
 }
 
-module.exports = {checkApiKey};
+function checkApiRol(...rol){
+  return (req, res, next) => {
+    if(rol.includes(req.user?.rol)){
+      next()
+    }else{
+      next(boom.unauthorized());
+    }
+  }
+}
+
+module.exports = {
+  checkApiKey,
+  checkApiRol
+};

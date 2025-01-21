@@ -5,6 +5,7 @@ const { Router } = require('express')
 const SuggestService = require('../services/suggestions')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
+const { checkApiRol } = require('../middleware/auth.handler');
 const {createSuggestSchema, updateSuggestSchema, getSuggestSchema, deleteSuggestSchema} = require('../schema/suggest');
 // constants
 const router = Router()
@@ -25,6 +26,7 @@ router.get('/:idProduct',
 
 router.post('/',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(createSuggestSchema, 'body'),
   async(req,res,next)=>{
     try{
@@ -39,6 +41,7 @@ router.post('/',
 
 router.put('/:id',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(getSuggestSchema, 'params'),
   validatorHandler(updateSuggestSchema, 'body'),
   async(req, res, next)=>{
@@ -54,6 +57,7 @@ router.put('/:id',
 
 router.delete('/:id',
   passport.authenticate('jwt', {session: false}),
+  checkApiRol('admin'),
   validatorHandler(deleteSuggestSchema, 'params'),
   async(req,res,next)=>{
     try{
