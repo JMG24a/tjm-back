@@ -5,23 +5,33 @@ class Products{
   constructor(){}
 
   async find(query){
-    const options = {
-      // include: ['category'],
-      where: {}
-    }
-
     const {
       limit,
-      offset
+      offset,
+      category
     } = query;
+      console.log("🚀 ~ Products ~ find ~ category:", category)
+
+    const options = {
+      // include: ['category'],
+      // where: { category: category }
+    }
+
+    if(category){
+      options.where = {category};
+    }
 
     if(limit && offset){
       options.limit = limit,
       options.offset = offset
     }
 
-    const res = await models.Product.findAll(options);
-    return res
+    try {
+      const res = await models.Product.findAll(options);
+      return res;
+    } catch (error) {
+      throw boom.badData('product not found')
+    }
   }
 
   async findOne(id){

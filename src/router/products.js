@@ -1,6 +1,8 @@
 //dependencies
 const passport = require('passport');
 const { Router } = require('express')
+const fs = require('fs');
+
 //my dependencies
 const ProductService = require('../services/products')
 //middleware
@@ -9,6 +11,7 @@ const { checkApiRol } = require('../middleware/auth.handler');
 
 const { checkApiKey } = require('../middleware/auth.handler');
 const {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require('../schema/product');
+const { upload, cloudinary } = require('../middleware/image.handle');
 // constants
 const router = Router()
 const services = new ProductService();
@@ -42,12 +45,29 @@ router.get('/:id',
 router.post('/',
   passport.authenticate('jwt', {session: false}),
   checkApiRol('admin'),
+  upload.single('image'),
   validatorHandler(createProductSchema, 'body'),
   async(req,res,next)=>{
     try{
       const body = req.body
-      const product = await services.create(body);
-      res.json(product)
+      // upload to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'cloudy'  // folder in Cloudinary
+      });
+
+      const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+      if(regex.test(result?.secure_url)){
+        await services.create({
+          ...body,
+          image: result?.secure_url
+        });
+      }
+
+      fs.unlinkSync(req.file.path);
+      res.json({
+        ...body,
+        image: result?.secure_url
+      })
     }
     catch(error){
       next(error);
@@ -57,14 +77,32 @@ router.post('/',
 router.put('/:id',
   passport.authenticate('jwt', {session: false}),
   checkApiRol('admin'),
+  upload.single('image'),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
   async(req, res, next)=>{
     try{
       const {id} = req.params;
       const body = req.body
-      const product = await services.update(id,body);
-      res.json(product)
+
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'cloudy'  // folder in Cloudinary
+      });
+
+      const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+      if(regex.test(result?.secure_url)){
+        await services.update(id,{
+          ...body,
+          image: result?.secure_url
+        });
+
+      }
+
+      fs.unlinkSync(req.file.path);
+      res.json({
+        ...body,
+        image: result?.secure_url
+      })
     }catch(err){
       next(err)
     }

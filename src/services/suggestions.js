@@ -7,8 +7,14 @@ class Suggestions{
   async find(idProduct){
     const options = {
       where: {
-        id_product: idProduct
-      }
+        id_product: idProduct,
+      },
+      include: [
+        {
+          model: models.Product,
+          as: 'suggest', // Debe coincidir con el alias definido en la asociación
+        },
+      ],
     }
     const suggest = await models.Suggest.findAll(options)
     if(!suggest){

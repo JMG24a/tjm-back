@@ -29,8 +29,11 @@ const SuggestSchema = {
 
 
 class Suggest extends Model {
-  static associate(){
-
+  static associate(models){
+    this.belongsTo(models.Product, {
+      as: 'suggest', // Alias de la relación
+      foreignKey: 'idSuggest', // Clave foránea en Suggest
+    });
   }
 
   static config(sequelize){

@@ -8,20 +8,28 @@ const appRouter = require('./router');
 //constants
 const app = express();
 const port = process.env.PORT || 3000;
-const whiteList = [`${process.env.ORIGIN}`];
+// const whiteList = ["http://localhost:3000"];
+// const optionsCors = {
+//   origin: (origin, callback) => {
+//     console.log("HELLO")
+//     if(whiteList.includes(origin)){
+//       console.log("🚀 ~ whiteList:", whiteList)
+//       callback(null, true);
+//     }else{
+//       callback(new Error('Access Denied'))
+//     }
+//   }
+// }
+
 const optionsCors = {
-  origin: (origin, callback) => {
-    if(whiteList.includes(origin) || !origin){
-      callback(null, true);
-    }else{
-      callback(new Error('Access Denied'))
-    }
-  }
-}
+  origin: '*', // Permite cualquier origen
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+};
 
 //middlewares
 app.use(express.json());
-appRouter(app)
+appRouter(app);
 app.use(cors(optionsCors));
 require('./auth');
 app.use(boomErrorHandler);

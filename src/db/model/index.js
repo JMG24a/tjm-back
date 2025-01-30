@@ -8,6 +8,8 @@ function setupModels(sequelize){
   Suggest.init(SuggestSchema, Suggest.config(sequelize));
   Product.init(ProductSchema, Product.config(sequelize));
   Image.init(ImageSchema, Image.config(sequelize));
+
+  Suggest.associate?.(sequelize.models);
 }
 
 module.exports = setupModels;
