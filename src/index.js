@@ -27,6 +27,17 @@ const optionsCors = {
   allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
 };
 
+app.get('/',
+  async(req,res,next)=>{
+    try {
+      res.json({
+        hello: "hi",
+      });
+    } catch (error) {
+      next(error);
+    }
+});
+
 //middlewares
 app.use(express.json());
 appRouter(app);
