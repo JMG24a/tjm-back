@@ -48,6 +48,4 @@ app.use(ormErrorHandler);
 app.use(errorHandler);
 
 //listen
-app.listen(port, ()=>{
-  console.log('mi port' + port);
-})
+module.exports = app;
