@@ -3,8 +3,8 @@
 const express = require('express');
 const cors = require('cors');
 // my dependencies
-const { boomErrorHandler, errorHandler, ormErrorHandler } = require('../middleware/error.handler')
-const appRouter = require('../router');
+const { boomErrorHandler, errorHandler, ormErrorHandler } = require('./middleware/error.handler')
+const appRouter = require('./router');
 //constants
 const app = express();
 const port = process.env.PORT || 3000;
@@ -42,7 +42,7 @@ app.get('/',
 app.use(express.json());
 appRouter(app);
 app.use(cors(optionsCors));
-require('../auth');
+require('./auth');
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
 app.use(errorHandler);
