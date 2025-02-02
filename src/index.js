@@ -8,7 +8,7 @@ const appRouter = require('./router');
 //constants
 const app = express();
 const port = process.env.PORT || 3000;
-const whiteList = ["http://localhost:3000"];
+const whiteList = [`http://localhost:${port}`];
 const optionsCors = {
   origin: (origin, callback) => {
     console.log("HELLO")
