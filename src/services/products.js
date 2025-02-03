@@ -10,7 +10,6 @@ class Products{
       offset,
       category
     } = query;
-      console.log("🚀 ~ Products ~ find ~ category:", category)
 
     const options = {
       // include: ['category'],
@@ -36,7 +35,6 @@ class Products{
 
   async findOne(id){
     const product = await models.Product.findByPk(id)
-    console.log("🚀 ~ Products ~ findOne ~ product:", product)
     if(!product){
       throw boom.notFound('product not found')
     }
