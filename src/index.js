@@ -7,7 +7,6 @@ const { boomErrorHandler, errorHandler, ormErrorHandler } = require('./middlewar
 const appRouter = require('./router');
 //constants
 const app = express();
-// const port = process.env.PORT || 3000;
 // const whiteList = [`http://localhost:${port}`];
 // const optionsCors = {
 //   origin: (origin, callback) => {
@@ -47,8 +46,8 @@ app.use(boomErrorHandler);
 app.use(ormErrorHandler);
 app.use(errorHandler);
 
-//listen
-// app.listen(port, ()=>{
-//   console.log("???", port)
+// listen
+// app.listen(process.env.PORT, ()=>{
+//   console.log("???", process.env.PORT)
 // })
 module.exports = app;
