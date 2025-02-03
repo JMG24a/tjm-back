@@ -4,7 +4,7 @@ const {config} = require("../config")
 
 const options = {
   dialect: 'postgres',
-  logging: config.isProd ? false : true
+  logging: false,
 }
 
 if(config.isProd){
