@@ -1,8 +1,10 @@
 const {Sequelize} = require('sequelize');
+const pg = require('pg');
 const setupModels = require('../db/model');
 const {config} = require("../config")
 
 const options = {
+  dialectModule: pg,
   dialect: 'postgres',
   logging: false,
 }
