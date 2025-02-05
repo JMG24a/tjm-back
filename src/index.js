@@ -46,8 +46,4 @@ app.use(boomErrorHandler);
 app.use(ormErrorHandler);
 app.use(errorHandler);
 
-// listen
-// app.listen(process.env.PORT, ()=>{
-//   console.log("???", process.env.PORT)
-// })
 module.exports = app;
