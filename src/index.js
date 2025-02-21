@@ -24,6 +24,7 @@ const optionsCors = {
   origin: '*', // Permite cualquier origen
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+  credentials: true,
 };
 
 app.get('/',
@@ -40,7 +41,7 @@ app.get('/',
 //middlewares
 app.use(express.json());
 appRouter(app);
-app.use(cors(optionsCors));
+app.use('*', cors(optionsCors));
 require('./auth');
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
