@@ -3,7 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 // my dependencies
-const { boomErrorHandler, errorHandler, ormErrorHandler } = require('./middleware/error.handler')
+const { boomErrorHandler, errorHandler, ormErrorHandler } = require('./middleware/error.handler');
 const appRouter = require('./router');
 //constants
 const app = express();
@@ -21,7 +21,7 @@ const app = express();
 // }
 
 const optionsCors = {
-  origin: '*', // Permite cualquier origen
+  origin: ['http://localhost:4000', 'https://tjm-front.vercel.app'], // Permite cualquier origen
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
   credentials: true,
