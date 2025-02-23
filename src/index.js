@@ -39,10 +39,12 @@ app.get('/',
 });
 
 //middlewares
-app.use(express.json());
 app.use(cors(optionsCors));
+app.options('*', cors(optionsCors)); // Manejar preflight requests OPTIONS
+app.use(express.json());
 appRouter(app);
 require('./auth');
+
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);
 app.use(errorHandler);
