@@ -40,8 +40,8 @@ app.get('/',
 
 //middlewares
 app.use(express.json());
+app.use(cors(optionsCors));
 appRouter(app);
-app.use('*', cors(optionsCors));
 require('./auth');
 app.use(boomErrorHandler);
 app.use(ormErrorHandler);

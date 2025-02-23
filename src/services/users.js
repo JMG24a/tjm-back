@@ -55,7 +55,6 @@ class Users{
       success: id
     }
   }
-
 }
 
 module.exports = Users;
