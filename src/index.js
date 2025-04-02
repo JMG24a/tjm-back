@@ -23,7 +23,7 @@ const app = express();
 const optionsCors = {
   origin: ['https://tjm-front.vercel.app', 'http://localhost:4000'], // Permite cualquier origen
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+  allowedHeaders: ['Content-Type', 'Authorization', 'api'], // Encabezados permitidos
   credentials: true,
 };
 
