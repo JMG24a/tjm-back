@@ -7,7 +7,7 @@ const fs = require('fs');
 const ProductService = require('../services/products')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
-const { checkApiRol } = require('../middleware/auth.handler');
+const { checkApiRol, updateWithOutImage } = require('../middleware/auth.handler');
 
 const { checkApiKey } = require('../middleware/auth.handler');
 const {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require('../schema/product');
@@ -74,9 +74,10 @@ router.post('/',
     }
 });
 
-router.put('/:id',
+router.patch('/:id',
   passport.authenticate('jwt', {session: false}),
   checkApiRol('admin'),
+  updateWithOutImage(),
   upload.single('image'),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),

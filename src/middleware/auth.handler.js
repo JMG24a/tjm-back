@@ -1,4 +1,6 @@
 const boom = require("@hapi/boom");
+const ProductService = require('../services/products')
+const services = new ProductService();
 
 function checkApiKey(req, res, next){
   const apiKey = req.headers['api'];
@@ -19,7 +21,33 @@ function checkApiRol(...rol){
   }
 }
 
+function updateWithOutImage(){
+  return (req, res, next) => {
+    if(req.body?.image){
+      next()
+    }else{
+      async(req, res, next)=>{
+        try{
+          const {id} = req.params;
+          const body = req.body
+
+          await services.update(id,{
+            ...body,
+          });
+
+          res.json({
+            ...body,
+          })
+        }catch(err){
+          next(err)
+        }
+      }
+    }
+  }
+}
+
 module.exports = {
   checkApiKey,
-  checkApiRol
+  checkApiRol,
+  updateWithOutImage
 };
