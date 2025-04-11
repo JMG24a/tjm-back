@@ -7,7 +7,7 @@ const fs = require('fs');
 const ProductService = require('../services/products')
 //middleware
 const { validatorHandler } = require('../middleware/validator.handler');
-const { checkApiRol, updateWithOutImage } = require('../middleware/auth.handler');
+const { checkApiRol } = require('../middleware/auth.handler');
 
 const { checkApiKey } = require('../middleware/auth.handler');
 const {createProductSchema, updateProductSchema, getProductSchema, queryProductSchema} = require('../schema/product');
@@ -77,7 +77,6 @@ router.post('/',
 router.patch('/:id',
   passport.authenticate('jwt', {session: false}),
   checkApiRol('admin'),
-  updateWithOutImage(),
   upload.single('image'),
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
@@ -86,24 +85,35 @@ router.patch('/:id',
       const {id} = req.params;
       const body = req.body
 
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'cloudy'  // folder in Cloudinary
-      });
-
-      const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
-      if(regex.test(result?.secure_url)){
-        await services.update(id,{
-          ...body,
-          image: result?.secure_url
+      if(req.file){
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'cloudy'  // folder in Cloudinary
         });
 
+        const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+        if(regex.test(result?.secure_url)){
+          await services.update(id,{
+            ...body,
+            image: result?.secure_url
+          });
+
+        }
+
+        fs.unlinkSync(req.file.path);
+        res.json({
+          ...body,
+          image: result?.secure_url
+        })
+      }else {
+        await services.update(id,{
+          ...body
+        });
+
+        res.json({
+          ...body
+        })
       }
 
-      fs.unlinkSync(req.file.path);
-      res.json({
-        ...body,
-        image: result?.secure_url
-      })
     }catch(err){
       next(err)
     }
